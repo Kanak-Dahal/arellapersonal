@@ -309,6 +309,183 @@
             .left::after, .right::after { left: 21px; right: auto; }
             .left .content, .right .content { transform: rotate(0deg); }
         }
+
+        /* =====================================================
+           NEW: LIVE "TOGETHER FOR" COUNTER
+           ===================================================== */
+        .love-counter {
+            display: inline-block;
+            margin-top: 38px;
+            padding: 22px 34px 20px;
+            background: rgba(255, 255, 255, 0.92);
+            border: 1px solid #ffb3c6;
+            border-radius: 14px;
+            box-shadow: 0 10px 25px rgba(128, 15, 47, 0.12);
+            max-width: 100%;
+        }
+
+        .love-counter .lc-label {
+            font-family: 'Caveat', cursive;
+            font-size: 1.7rem;
+            font-weight: 700;
+            color: #ff4d6d;
+            letter-spacing: 0;
+            line-height: 1.1;
+            margin-bottom: 6px;
+        }
+
+        .love-counter .lc-headline {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.9rem;
+            font-weight: 500;
+            letter-spacing: 0;
+            color: #800f2f;
+            line-height: 1.3;
+        }
+
+        .love-counter .lc-headline b {
+            font-weight: 700;
+            color: #c9184a;
+            font-variant-numeric: tabular-nums;
+        }
+
+        .lc-ticker {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 14px;
+        }
+
+        .lc-box {
+            min-width: 64px;
+            padding: 8px 10px 6px;
+            background: #fff0f3;
+            border: 1px solid #ffb3c6;
+            border-radius: 10px;
+        }
+
+        .lc-box span {
+            display: block;
+            font-family: 'Playfair Display', serif;
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: #c9184a;
+            line-height: 1.1;
+            font-variant-numeric: tabular-nums;
+        }
+
+        .lc-box small {
+            display: block;
+            font-size: 0.7rem;
+            letter-spacing: 1px;
+            color: #800f2f;
+        }
+
+        .lc-next {
+            margin-top: 14px;
+            font-size: 0.9rem !important;
+            letter-spacing: 0.5px !important;
+            color: #800f2f;
+        }
+
+        .lc-heart {
+            display: inline-block;
+            animation: lcBeat 1.4s ease-in-out infinite;
+        }
+
+        @keyframes lcBeat {
+            0%, 100% { transform: scale(1); }
+            15% { transform: scale(1.25); }
+            30% { transform: scale(1); }
+            45% { transform: scale(1.18); }
+        }
+
+        /* =====================================================
+           NEW: MONTHSARY BANNER + FLOATING HEARTS
+           ===================================================== */
+        #monthsary-banner {
+            position: fixed;
+            top: 18px; left: 50%;
+            transform: translate(-50%, -160%);
+            width: min(92vw, 460px);
+            padding: 20px 26px 18px;
+            text-align: center;
+            background: #ffd166;
+            color: #590d22;
+            border: 2px solid #fff;
+            border-radius: 18px;
+            box-shadow: 0 14px 34px rgba(128, 15, 47, 0.35);
+            z-index: 1000000;
+            transition: transform 0.9s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            pointer-events: auto;
+        }
+
+        #monthsary-banner.show { transform: translate(-50%, 0); }
+
+        #monthsary-banner h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.6rem;
+            color: #c9184a;
+            margin-bottom: 4px;
+        }
+
+        #monthsary-banner p {
+            font-family: 'Caveat', cursive;
+            font-size: 1.5rem;
+            font-weight: 700;
+            line-height: 1.2;
+        }
+
+        #monthsary-close {
+            position: absolute;
+            top: 8px; right: 12px;
+            background: none;
+            border: none;
+            font-size: 1.3rem;
+            color: #800f2f;
+            cursor: pointer;
+        }
+
+        .float-heart {
+            position: fixed;
+            bottom: -40px;
+            z-index: 999990;
+            pointer-events: none;
+            animation: floatUp linear forwards;
+        }
+
+        @keyframes floatUp {
+            0%   { transform: translateY(0) rotate(0deg); opacity: 0; }
+            10%  { opacity: 1; }
+            100% { transform: translateY(-110vh) rotate(25deg); opacity: 0; }
+        }
+
+        /* Sound on/off button (appears after unlock) */
+        #sound-toggle {
+            position: fixed;
+            right: 16px; bottom: 16px;
+            width: 46px; height: 46px;
+            border-radius: 50%;
+            border: 2px solid #fff;
+            background: #ff4d6d;
+            color: #fff;
+            font-size: 1.2rem;
+            cursor: pointer;
+            box-shadow: 0 6px 16px rgba(128, 15, 47, 0.35);
+            z-index: 999980;
+            display: none;
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .lc-heart { animation: none; }
+            .float-heart { display: none; }
+        }
+
+        @media screen and (max-width: 768px) {
+            .love-counter { padding: 18px 16px 16px; }
+            .love-counter .lc-headline { font-size: 1.45rem; }
+            .lc-box { min-width: 54px; }
+        }
     </style>
 </head>
 
@@ -326,10 +503,29 @@
 <div class="center-overlay"></div>
 <div id="thinking-cloud"></div>
 
+<!-- NEW: monthsary banner + sound button -->
+<div id="monthsary-banner" role="status" aria-live="polite">
+    <button id="monthsary-close" aria-label="Close">✕</button>
+    <h3 id="monthsary-title"></h3>
+    <p id="monthsary-text"></p>
+</div>
+<button id="sound-toggle" aria-label="Toggle sound" title="Monthsary chime on/off">🔔</button>
+
 <div class="main-content" style="display: none;">
     <header>
-        <h1>Happy Anniversary</h1>
+        <h1>I lovee youu</h1>
         <p>Babbygurrll❤️</p>
+
+        <!-- NEW: live counter -->
+        <div class="love-counter">
+            <div class="lc-label">since 20th April, 2025</div>
+            <div class="lc-headline">Together for <b id="lc-days">0</b> days, <b id="lc-hours">0</b> hours <span class="lc-heart">❤️</span></div>
+            <div class="lc-ticker">
+                <div class="lc-box"><span id="lc-min">0</span><small>minutes</small></div>
+                <div class="lc-box"><span id="lc-sec">0</span><small>seconds</small></div>
+            </div>
+            <p class="lc-next" id="lc-next"></p>
+        </div>
     </header>
 
     <section class="timeline">
@@ -638,19 +834,197 @@
             cloud.style.left = e.clientX + 'px';
             cloud.style.top = e.clientY + 'px';
         }
+    });
 
-        document.getElementById("unlock-btn").addEventListener("click", function () {
-    const correctPassword = "20april"; // change this
-    const input = document.getElementById("password-input").value;
+    // --- 4. PASSWORD UNLOCK (same password as before; moved out of the mousemove
+    //        listener so the button works on phones too) ---
+    function checkPassword() {
+        const correctPassword = "20april"; // change this
+        const input = document.getElementById("password-input").value;
 
-    if (input === correctPassword) {
-        document.getElementById("password-screen").style.display = "none";
-        document.querySelector(".main-content").style.display = "block";
-    } else {
-        document.getElementById("error-msg").innerText = "Wrong password 😢";
+        if (input === correctPassword) {
+            document.getElementById("password-screen").style.display = "none";
+            document.querySelector(".main-content").style.display = "block";
+            onUnlocked(); // NEW: starts the counter + monthsary check (this click also allows sound)
+        } else {
+            document.getElementById("error-msg").innerText = "Wrong password 😢";
+        }
     }
-});
-});
+
+    document.getElementById("password-input").addEventListener("keydown", function (e) {
+        if (e.key === "Enter") checkPassword();
+    });
+
+    // =====================================================
+    // NEW: 5. LIVE COUNTER + MONTHSARY CHIME
+    // =====================================================
+    const START_DATE = new Date(2025, 3, 20, 0, 0, 0); // 20 April 2025 (month is 0-indexed)
+    const MONTHSARY_DAY = 20;
+
+    const elDays  = document.getElementById('lc-days');
+    const elHours = document.getElementById('lc-hours');
+    const elMin   = document.getElementById('lc-min');
+    const elSec   = document.getElementById('lc-sec');
+    const elNext  = document.getElementById('lc-next');
+    const banner  = document.getElementById('monthsary-banner');
+    const soundBtn = document.getElementById('sound-toggle');
+
+    let unlocked = false;
+    let soundOn = true;
+    let audioCtx = null;
+    let lastCelebratedKey = null;
+
+    // --- Counter ---
+    function updateCounter() {
+        const now = new Date();
+        let diff = Math.max(0, now - START_DATE);
+        const days = Math.floor(diff / 86400000);
+        const hours = Math.floor((diff % 86400000) / 3600000);
+        const mins = Math.floor((diff % 3600000) / 60000);
+        const secs = Math.floor((diff % 60000) / 1000);
+
+        elDays.textContent = days.toLocaleString();
+        elHours.textContent = hours;
+        elMin.textContent = mins;
+        elSec.textContent = secs;
+
+        updateNextMonthsary(now);
+    }
+
+    function updateNextMonthsary(now) {
+        if (now.getDate() === MONTHSARY_DAY) {
+            elNext.textContent = "Happy monthsary, babbygurrll 💕";
+            return;
+        }
+        let next = new Date(now.getFullYear(), now.getMonth(), MONTHSARY_DAY);
+        if (next <= now) next = new Date(now.getFullYear(), now.getMonth() + 1, MONTHSARY_DAY);
+        const daysLeft = Math.ceil((next - now) / 86400000);
+        elNext.textContent = "Next monthsary in " + daysLeft + (daysLeft === 1 ? " day 💗" : " days 💗");
+    }
+
+    // --- Months completed on a given 20th (e.g. 20 Oct 2026 = 18) ---
+    function monthsaryNumber(date) {
+        return (date.getFullYear() - START_DATE.getFullYear()) * 12 + (date.getMonth() - START_DATE.getMonth());
+    }
+
+    function ordinal(n) {
+        const s = ["th", "st", "nd", "rd"], v = n % 100;
+        return n + (s[(v - 20) % 10] || s[v] || s[0]);
+    }
+
+    // --- Chime (synthesised with Web Audio, so no audio file is needed) ---
+    function getAudio() {
+        if (!audioCtx) {
+            const AC = window.AudioContext || window.webkitAudioContext;
+            if (!AC) return null;
+            audioCtx = new AC();
+        }
+        if (audioCtx.state === 'suspended') audioCtx.resume();
+        return audioCtx;
+    }
+
+    function bell(freq, startTime, vol) {
+        const ctx = audioCtx;
+        [[1, 1], [2.01, 0.35], [3.98, 0.12]].forEach(([mult, amp]) => {
+            const osc = ctx.createOscillator();
+            const gain = ctx.createGain();
+            osc.type = 'sine';
+            osc.frequency.value = freq * mult;
+            gain.gain.setValueAtTime(0.0001, startTime);
+            gain.gain.exponentialRampToValueAtTime(vol * amp, startTime + 0.015);
+            gain.gain.exponentialRampToValueAtTime(0.0001, startTime + 2.2);
+            osc.connect(gain);
+            gain.connect(ctx.destination);
+            osc.start(startTime);
+            osc.stop(startTime + 2.3);
+        });
+    }
+
+    function playChime() {
+        if (!soundOn) return;
+        const ctx = getAudio();
+        if (!ctx) return;
+        const t = ctx.currentTime + 0.05;
+        // Little rising melody (E5 G5 B5 E6), then a soft chord
+        [659.25, 783.99, 987.77, 1318.51].forEach((f, i) => bell(f, t + i * 0.2, 0.22));
+        [659.25, 987.77, 1318.51].forEach(f => bell(f, t + 0.95, 0.12));
+    }
+
+    // --- Floating hearts ---
+    function launchHearts(count) {
+        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+        const symbols = ['❤️', '💕', '💖', '💗', '🌸'];
+        for (let i = 0; i < count; i++) {
+            setTimeout(() => {
+                const h = document.createElement('span');
+                h.className = 'float-heart';
+                h.textContent = symbols[Math.floor(Math.random() * symbols.length)];
+                h.style.left = Math.random() * 100 + 'vw';
+                h.style.fontSize = (18 + Math.random() * 26) + 'px';
+                h.style.animationDuration = (4 + Math.random() * 4) + 's';
+                document.body.appendChild(h);
+                setTimeout(() => h.remove(), 8500);
+            }, i * 120);
+        }
+    }
+
+    // --- Show the monthsary celebration ---
+    function celebrateMonthsary(n) {
+        const title = document.getElementById('monthsary-title');
+        const text = document.getElementById('monthsary-text');
+
+        if (n > 0 && n % 12 === 0) {
+            const yrs = n / 12;
+            title.textContent = "Happy " + ordinal(yrs) + " Anniversary! 🎉";
+            text.textContent = yrs + (yrs === 1 ? " year" : " years") + " of us. I love you, babbygurrll ❤️";
+        } else {
+            title.textContent = "Happy " + ordinal(n) + " Monthsary! 💕";
+            text.textContent = n + (n === 1 ? " month" : " months") + " of us. I love you, babbygurrll ❤️";
+        }
+
+        banner.classList.add('show');
+        playChime();
+        launchHearts(26);
+        setTimeout(() => banner.classList.remove('show'), 12000);
+    }
+
+    document.getElementById('monthsary-close').addEventListener('click', () => banner.classList.remove('show'));
+
+    // --- Check whether today is the 20th (runs on unlock and every few seconds, so a
+    //     page left open overnight also chimes when midnight turns into the 20th) ---
+    function checkMonthsary() {
+        const now = new Date();
+        const forced = new URLSearchParams(location.search).has('testmonthsary'); // preview mode
+        if (!forced && now.getDate() !== MONTHSARY_DAY) return;
+
+        const key = now.getFullYear() + '-' + now.getMonth();
+        if (lastCelebratedKey === key && !forced) return;
+
+        const n = monthsaryNumber(now);
+        if (n < 1 && !forced) return;
+
+        lastCelebratedKey = key;
+        celebrateMonthsary(forced ? Math.max(n, 18) : n);
+    }
+
+    // --- Sound button ---
+    soundBtn.addEventListener('click', () => {
+        soundOn = !soundOn;
+        soundBtn.textContent = soundOn ? '🔔' : '🔕';
+        if (soundOn) playChime(); // short preview so she knows what to expect
+    });
+
+    // --- Start everything once the password is correct ---
+    function onUnlocked() {
+        if (unlocked) return;
+        unlocked = true;
+        getAudio(); // unlocks audio, since this runs inside the click
+        soundBtn.style.display = 'block';
+        updateCounter();
+        setInterval(updateCounter, 1000);
+        checkMonthsary();
+        setInterval(checkMonthsary, 5000);
+    }
 </script>
 
 </body>
